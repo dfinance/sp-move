@@ -8,7 +8,7 @@ extern crate serde_alt as serde;
 #[cfg(feature = "runtime-benchmarks")]
 extern crate bcs_alt as bcs;
 #[cfg(feature = "runtime-benchmarks")]
-mod benchmarking;
+pub mod benchmarking;
 
 /// Edit this file to define custom logic or remove it if it is not needed.
 /// Learn more about FRAME and the core library of Substrate FRAME pallets:

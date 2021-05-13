@@ -154,7 +154,8 @@ benchmarks! {
     }
 }
 
-impl_benchmark_test_suite!(Mvm, crate::mock::new_test_ext(), crate::mock::Test,);
+// impl_benchmark_test_suite!(Mvm, crate::mock::new_test_ext(), crate::mock::Test,);
+pub mod store_{pub use super::store::*;}
 
 pub fn module_access_core(name: &str) -> Vec<u8> {
     ModuleId::new(CORE_CODE_ADDRESS, Identifier::new(name).unwrap()).access_vector()
@@ -294,93 +295,93 @@ mod store {
     }
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-    use crate::tests_composite::{ExtBuilder, Test};
-    use frame_support::assert_ok;
+// #[cfg(test)]
+// mod tests {
+//     use super::*;
+//     use crate::tests_composite::{ExtBuilder, Test};
+//     use frame_support::assert_ok;
 
-    #[test]
-    fn publish_std() {
-        ExtBuilder::default().build().execute_with(|| {
-            assert_ok!(test_benchmark_publish_std::<Test>());
-        });
-    }
+//     #[test]
+//     fn publish_std() {
+//         ExtBuilder::default().build().execute_with(|| {
+//             assert_ok!(test_benchmark_publish_std::<Test>());
+//         });
+//     }
 
-    #[test]
-    fn publish_empty_module() {
-        ExtBuilder::default().build().execute_with(|| {
-            assert_ok!(test_benchmark_publish_empty_module::<Test>());
-        });
-    }
+//     #[test]
+//     fn publish_empty_module() {
+//         ExtBuilder::default().build().execute_with(|| {
+//             assert_ok!(test_benchmark_publish_empty_module::<Test>());
+//         });
+//     }
 
-    #[test]
-    fn publish_many_deps_module() {
-        ExtBuilder::default().build().execute_with(|| {
-            assert_ok!(test_benchmark_publish_many_deps_module::<Test>());
-        });
-    }
+//     #[test]
+//     fn publish_many_deps_module() {
+//         ExtBuilder::default().build().execute_with(|| {
+//             assert_ok!(test_benchmark_publish_many_deps_module::<Test>());
+//         });
+//     }
 
-    #[test]
-    fn publish_s_module() {
-        ExtBuilder::default().build().execute_with(|| {
-            assert_ok!(test_benchmark_publish_s_module::<Test>());
-        });
-    }
+//     #[test]
+//     fn publish_s_module() {
+//         ExtBuilder::default().build().execute_with(|| {
+//             assert_ok!(test_benchmark_publish_s_module::<Test>());
+//         });
+//     }
 
-    #[test]
-    fn publish_m_module() {
-        ExtBuilder::default().build().execute_with(|| {
-            assert_ok!(test_benchmark_publish_m_module::<Test>());
-        });
-    }
+//     #[test]
+//     fn publish_m_module() {
+//         ExtBuilder::default().build().execute_with(|| {
+//             assert_ok!(test_benchmark_publish_m_module::<Test>());
+//         });
+//     }
 
-    #[test]
-    fn publish_l_module() {
-        ExtBuilder::default().build().execute_with(|| {
-            assert_ok!(test_benchmark_publish_l_module::<Test>());
-        });
-    }
+//     #[test]
+//     fn publish_l_module() {
+//         ExtBuilder::default().build().execute_with(|| {
+//             assert_ok!(test_benchmark_publish_l_module::<Test>());
+//         });
+//     }
 
-    #[test]
-    fn execute_many_params() {
-        ExtBuilder::default().build().execute_with(|| {
-            assert_ok!(test_benchmark_execute_many_params::<Test>());
-        });
-    }
+//     #[test]
+//     fn execute_many_params() {
+//         ExtBuilder::default().build().execute_with(|| {
+//             assert_ok!(test_benchmark_execute_many_params::<Test>());
+//         });
+//     }
 
-    #[test]
-    fn execute_store() {
-        ExtBuilder::default().build().execute_with(|| {
-            assert_ok!(test_benchmark_execute_store::<Test>());
-        });
-    }
+//     #[test]
+//     fn execute_store() {
+//         ExtBuilder::default().build().execute_with(|| {
+//             assert_ok!(test_benchmark_execute_store::<Test>());
+//         });
+//     }
 
-    #[test]
-    fn execute_load() {
-        ExtBuilder::default().build().execute_with(|| {
-            assert_ok!(test_benchmark_execute_load::<Test>());
-        });
-    }
+//     #[test]
+//     fn execute_load() {
+//         ExtBuilder::default().build().execute_with(|| {
+//             assert_ok!(test_benchmark_execute_load::<Test>());
+//         });
+//     }
 
-    #[test]
-    fn execute_store_event() {
-        ExtBuilder::default().build().execute_with(|| {
-            assert_ok!(test_benchmark_execute_store_event::<Test>());
-        });
-    }
+//     #[test]
+//     fn execute_store_event() {
+//         ExtBuilder::default().build().execute_with(|| {
+//             assert_ok!(test_benchmark_execute_store_event::<Test>());
+//         });
+//     }
 
-    #[test]
-    fn execute_vec_input() {
-        ExtBuilder::default().build().execute_with(|| {
-            assert_ok!(test_benchmark_execute_vec_input::<Test>());
-        });
-    }
+//     #[test]
+//     fn execute_vec_input() {
+//         ExtBuilder::default().build().execute_with(|| {
+//             assert_ok!(test_benchmark_execute_vec_input::<Test>());
+//         });
+//     }
 
-    #[test]
-    fn execute_execute_loop() {
-        ExtBuilder::default().build().execute_with(|| {
-            assert_ok!(test_benchmark_eexecute_loop::<Test>());
-        });
-    }
-}
+//     #[test]
+//     fn execute_execute_loop() {
+//         ExtBuilder::default().build().execute_with(|| {
+//             assert_ok!(test_benchmark_eexecute_loop::<Test>());
+//         });
+//     }
+// }
