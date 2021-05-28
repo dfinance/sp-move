@@ -1,7 +1,7 @@
 use sp_core::{Pair, Public, sr25519};
 use mv_node_runtime::{
     AccountId, AuraConfig, BalancesConfig, GenesisConfig, GrandpaConfig, SudoConfig,
-    SystemConfig, WASM_BINARY, Signature,
+    SystemConfig, WASM_BINARY, Signature, MvmConfig,
 };
 use sp_consensus_aura::sr25519::AuthorityId as AuraId;
 use sp_finality_grandpa::AuthorityId as GrandpaId;
@@ -149,6 +149,8 @@ fn testnet_genesis(
     endowed_accounts: Vec<AccountId>,
     _enable_println: bool,
 ) -> GenesisConfig {
+
+    let stdlib = include_bytes!(concat!(env!("OUT_DIR"), "/move_stdlib/target/packages/move-stdlib.pac")).to_vec();
     GenesisConfig {
         frame_system: Some(SystemConfig {
             // Add Wasm runtime to storage.
@@ -175,6 +177,9 @@ fn testnet_genesis(
         pallet_sudo: Some(SudoConfig {
             // Assign network admin rights.
             key: root_key,
+        }),
+        sp_mvm: Some(MvmConfig {
+            stdlib
         }),
     }
 }

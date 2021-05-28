@@ -50,6 +50,7 @@ rev = "1c94891be56ec67eb04a8d1bd21775219d526f48"
 default-features = false
 
 [dependencies]
+serde = { version = "1.0", optional = true }
 once_cell = { default-features = false, version = "1.5.2" }
 # substrate:
 frame-support = { default-features = false, version = "3.0.0" }
@@ -88,6 +89,7 @@ default = [
 ]
 no-vm-static = []
 std = [
+    "serde",
     "log/std",
     "once_cell/std",
     "vm/std",
