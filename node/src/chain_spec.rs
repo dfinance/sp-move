@@ -1,8 +1,9 @@
 use sp_core::{Pair, Public, sr25519};
 use mv_node_runtime::{
     AccountId, AuraConfig, BalancesConfig, GenesisConfig, GrandpaConfig, SudoConfig,
-    SystemConfig, WASM_BINARY, Signature,
+    SystemConfig, WASM_BINARY, Signature, MvmConfig
 };
+//use sp_mvm::GenesisConfig as MoveGenesisConfig;
 use sp_consensus_aura::sr25519::AuthorityId as AuraId;
 use sp_finality_grandpa::AuthorityId as GrandpaId;
 use sp_runtime::traits::{Verify, IdentifyAccount};
@@ -160,5 +161,10 @@ fn testnet_genesis(
             // Assign network admin rights.
             key: root_key,
         }),
+        sp_mvm: Some(
+            MvmConfig {
+                stdlib: vec![]
+            }
+        )
     }
 }

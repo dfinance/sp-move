@@ -67,6 +67,8 @@ sp-io = { default-features = false, version = "3.0.0" }
 # serde is for lcs/bcs only
 # used for benchmarking (runtime, std, no-std)
 serde-alt = { version = "1", default-features = false, package = "alt_serde", features = ["derive", "alloc"], optional = true }
+serde = { version = "1.0.119", optional = true, features = [ "derive" ] } # / 1.0.101
+
 [dependencies.bcs-alt]
 package = "bcs"
 default-features = false
@@ -105,6 +107,7 @@ std = [
     "move-vm-types/std",
     "timestamp/std",
     "balances/std",
+    "serde",
 ]
 
 runtime-benchmarks = [

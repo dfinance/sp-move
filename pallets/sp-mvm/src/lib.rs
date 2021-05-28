@@ -268,6 +268,27 @@ pub mod pallet {
 
     const GAS_UNIT_PRICE: u64 = 1;
 
+
+    #[pallet::genesis_config]
+    pub struct GenesisConfig {
+        pub stdlib: Vec<u8>,
+    }
+
+    #[cfg(feature = "std")]
+	impl Default for GenesisConfig {
+		fn default() -> Self {
+			Self {
+                stdlib: vec![]
+			}
+		}
+	}
+
+    #[pallet::genesis_build]
+    impl<T: Config> GenesisBuild<T> for GenesisConfig {
+        fn build(&self) {
+        }
+    }
+
     impl<T: Config> Pallet<T> {
         #![allow(clippy::useless_conversion)]
         fn get_move_gas_limit(gas_limit: u64) -> Result<Gas, Error<T>> {

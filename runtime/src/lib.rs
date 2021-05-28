@@ -313,7 +313,7 @@ construct_runtime!(
         Balances: pallet_balances::{Module, Call, Storage, Config<T>, Event<T>},
         TransactionPayment: pallet_transaction_payment::{Module, Storage},
         Sudo: pallet_sudo::{Module, Call, Config<T>, Storage, Event<T>},
-        Mvm: sp_mvm::{Module, Call, Storage, Event<T>},
+        Mvm: sp_mvm::{Module, Call, Config, Storage, Event<T>},
     }
 );
 
