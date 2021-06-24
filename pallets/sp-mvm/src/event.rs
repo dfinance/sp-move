@@ -1,9 +1,10 @@
 use core::convert::TryInto;
+use move_vm::io::traits::EventHandler;
+use sp_core::hexdisplay::AsBytesRef;
 use sp_std::prelude::*;
 use move_core_types::account_address::AccountAddress;
 use move_core_types::language_storage::ModuleId;
 use move_core_types::language_storage::TypeTag;
-use move_vm::data::EventHandler;
 use crate::types;
 use crate::{Event, Config};
 use crate::addr::address_to_account;
@@ -21,52 +22,27 @@ pub trait DepositMoveEvent {
 pub struct EventWriter<F>(F);
 
 pub struct MoveEventArguments {
-    pub addr: AccountAddress,
+    pub guid: Vec<u8>,
     pub ty_tag: TypeTag,
     pub message: Vec<u8>,
-    pub caller: Option<ModuleId>,
 }
 
 impl<T: Config> TryInto<Event<T>> for MoveEventArguments {
     type Error = codec::Error;
 
     fn try_into(self) -> Result<Event<T>, Self::Error> {
-        let account = address_to_account::<T::AccountId>(&self.addr)?;
-        let mut caller_error = None::<Self::Error>;
-        let caller: Option<types::MoveModuleId<T::AccountId>> = self
-            .caller
-            .map(|caller| {
-                caller
-                    .try_into()
-                    .map_err(|err| caller_error = Some(err))
-                    .ok()
-            })
-            .flatten();
-
-        if let Some(err) = caller_error {
-            return Err(err);
-        }
-
         let ty_tag_enc = format!("{}", self.ty_tag).as_bytes().to_vec();
-
-        Ok(Event::Event(account, ty_tag_enc, self.message, caller))
+        Ok(Event::Event(self.guid, ty_tag_enc, self.message))
     }
 }
 
 impl<F: Fn(MoveEventArguments)> EventHandler for EventWriter<F> {
     #[inline]
-    fn on_event(
-        &self,
-        addr: AccountAddress,
-        ty_tag: TypeTag,
-        message: Vec<u8>,
-        caller: Option<ModuleId>,
-    ) {
+    fn on_event(&self, guid: Vec<u8>, _seq_num: u64, ty_tag: TypeTag, message: Vec<u8>) {
         self.0(MoveEventArguments {
-            addr,
+            guid,
             ty_tag,
             message,
-            caller,
         })
     }
 }

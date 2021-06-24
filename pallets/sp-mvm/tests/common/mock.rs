@@ -11,7 +11,6 @@ use frame_support::{
 use frame_support::traits::{OnInitialize, OnFinalize};
 use sp_runtime::traits::{BlakeTwo256, IdentityLookup};
 use sp_runtime::{testing::Header};
-use move_vm::data::Oracle;
 
 use super::addr::origin_ps_acc;
 use super::addr::root_ps_acc;
@@ -108,14 +107,14 @@ impl timestamp::Config for Test {
 // --- balances --- //
 
 parameter_types! {
-    pub const ExistentialDeposit: u128 = 1;
+    pub const ExistentialDeposit: u64 = 1;
     pub const MaxLocks: u32 = 50;
 }
 
 impl balances::Config for Test {
     type MaxLocks = MaxLocks;
     /// The type for recording an account's balance.
-    type Balance = u128;
+    type Balance = u64;
     /// The ubiquitous event type.
     type Event = Event;
     type DustRemoval = ();
@@ -135,16 +134,6 @@ impl sp_mvm::Config for Test {
 pub type Sys = system::Module<Test>;
 pub type Time = timestamp::Module<Test>;
 pub type MoveEvent = sp_mvm::Event<Test>;
-
-// TODO: use this `MockOracle` instead of the real one
-#[derive(Clone, Copy, Default)]
-pub struct MockOracle(pub Option<u128>);
-
-impl Oracle for MockOracle {
-    fn get_price(&self, _ticker: &str) -> Option<u128> {
-        self.0
-    }
-}
 
 /// Build genesis storage according to the mock runtime.
 pub fn new_test_ext() -> sp_io::TestExternalities {

@@ -84,17 +84,17 @@ fn execute_script() {
 
         let expected = vec![
             // one for user::Proxy -> std::Event (`Event::emit`)
-            Event::Event(origin, tt.to_vec(), 42u64.to_le_bytes().to_vec(), None).into(),
-            // and one for user::Proxy -> std::Event (`EventProxy::emit_event`)
             Event::Event(
-                origin,
                 tt.to_vec(),
                 42u64.to_le_bytes().to_vec(),
-                Some(
-                    ModuleId::new(to_move_addr(origin), Identifier::new(proxy.name()).unwrap())
-                        .try_into()
-                        .unwrap(),
-                ),
+                42u64.to_le_bytes().to_vec(),
+            )
+            .into(),
+            // and one for user::Proxy -> std::Event (`EventProxy::emit_event`)
+            Event::Event(
+                tt.to_vec(),
+                42u64.to_le_bytes().to_vec(),
+                42u64.to_le_bytes().to_vec(),
             )
             .into(),
         ];

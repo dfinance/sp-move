@@ -55,7 +55,7 @@ pub mod pallet {
 
     use move_vm::Vm;
     use move_vm::mvm::Mvm;
-    use move_vm::data::ExecutionContext;
+    use move_vm::io::context::ExecutionContext;
     use move_vm::types::Gas;
     use move_vm::types::ModuleTx;
     use move_vm::types::Transaction;
@@ -102,10 +102,11 @@ pub mod pallet {
         /// Event provided by Move VM
         /// [account, type_tag, message, module]
         Event(
-            T::AccountId, /* transcoded AccountAddress */
-            Vec<u8>,      /* encoded TypeTag as String, use Text in web-UI */
-            Vec<u8>,      /* encoded String, use Text in web-UI */
-            Option<types::MoveModuleId<T::AccountId>>,
+            // T::AccountId, /* transcoded AccountAddress */
+            Vec<u8>, /* encoded TypeTag as String, use Text in web-UI */
+            Vec<u8>, /* encoded String, use Text in web-UI */
+            Vec<u8>, /* encoded TypeTag as String, use Text in web-UI */
+                     // Option<types::MoveModuleId<T::AccountId>>,
         ),
 
         /// Event about successful move-module publishing
@@ -366,10 +367,7 @@ pub mod pallet {
 
     impl<T: Config> event::DepositMoveEvent for Pallet<T> {
         fn deposit_move_event(e: MoveEventArguments) {
-            debug!(
-                "MoveVM Event: {:?} {:?} {:?} {:?}",
-                e.addr, e.caller, e.ty_tag, e.message
-            );
+            debug!("MoveVM Event: {:?} {:?} {:?}", e.guid, e.ty_tag, e.message);
 
             // Emit an event:
             // TODO: dispatch up the error by TryInto. Error is almost impossible but who knows..
@@ -379,17 +377,11 @@ pub mod pallet {
 
     impl<T: Config> mvm::TryCreateMoveVm<T> for Pallet<T> {
         #[cfg(not(feature = "no-vm-static"))]
-        type Vm = Mvm<
-            boxed::StorageAdapter,
-            event::DefaultEventHandler,
-            oracle::DummyOracle,
-            boxed::BalancesAdapter,
-        >;
+        type Vm = Mvm<boxed::StorageAdapter, event::DefaultEventHandler, boxed::BalancesAdapter>;
         #[cfg(feature = "no-vm-static")]
         type Vm = Mvm<
             StorageAdapter<VMStorage<T>>,
             event::DefaultEventHandler,
-            oracle::DummyOracle,
             balance::BalancesAdapter<T>,
         >;
         type Error = Error<T>;
@@ -399,7 +391,6 @@ pub mod pallet {
             Mvm::new(
                 Self::move_vm_storage().into(),
                 Self::create_move_event_handler(),
-                Default::default(),
                 balance::BalancesAdapter::<T>::new().into(),
             )
             .map_err(|err| {
@@ -759,5 +750,68 @@ pub mod pallet {
         VmMaxValueDepthReached,
         /// Unknown status.
         UnknownStatus,
+
+        // Documentation_missing
+        BadTransactionFeeCurrency,
+        // Documentation_missing
+        FeatureUnderGating,
+        // Documentation_missing
+        FieldMissingTypeAbility,
+        // Documentation_missing
+        PopWithoutDropAbility,
+        // Documentation_missing
+        CopylocWithoutCopyAbility,
+        // Documentation_missing
+        ReadrefWithoutCopyAbility,
+        // Documentation_missing
+        WriterefWithoutDropAbility,
+        // Documentation_missing
+        ExistsWithoutKeyAbilityOrBadArgument,
+        // Documentation_missing
+        BorrowglobalWithoutKeyAbility,
+        // Documentation_missing
+        MovefromWithoutKeyAbility,
+        // Documentation_missing
+        MovetoWithoutKeyAbility,
+        // Documentation_missing
+        MissingAcquiresAnnotation,
+        // Documentation_missing
+        ExtraneousAcquiresAnnotation,
+        // Documentation_missing
+        DuplicateAcquiresAnnotation,
+        // Documentation_missing
+        InvalidAcquiresAnnotation,
+        // Documentation_missing
+        ConstraintNotSatisfied,
+        // Documentation_missing
+        UnsafeRetUnusedValuesWithoutDrop,
+        // Documentation_missing
+        BackwardIncompatibleModuleUpdate,
+        // Documentation_missing
+        CyclicModuleDependency,
+        // Documentation_missing
+        NumberOfArgumentsMismatch,
+        // Documentation_missing
+        InvalidParamTypeForDeserialization,
+        // Documentation_missing
+        FailedToDeserializeArgument,
+        // Documentation_missing
+        NumberOfSignerArgumentsMismatch,
+        // Documentation_missing
+        CalledScriptVisibleFromNonScriptVisible,
+        // Documentation_missing
+        ExecuteScriptFunctionCalledOnNonScriptVisible,
+        // Documentation_missing
+        InvalidFriendDeclWithSelf,
+        // Documentation_missing
+        InvalidFriendDeclWithModulesOutsideAccountAddress,
+        // Documentation_missing
+        InvalidFriendDeclWithModulesInDependencies,
+        // Documentation_missing
+        CyclicModuleFriendship,
+        // Documentation_missing
+        UnknownAbility,
+        // Documentation_missing
+        InvalidFlagBits,
     }
 }

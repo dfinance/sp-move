@@ -1,8 +1,8 @@
+use move_vm::io::state::State;
 use serde::Deserialize;
 use frame_support::assert_ok;
 use move_core_types::identifier::Identifier;
 use move_core_types::language_storage::StructTag;
-use move_vm::data::*;
 use move_vm_runtime::data_cache::RemoteCache;
 use sp_mvm::storage::MoveVmStorage;
 
@@ -28,8 +28,7 @@ fn call_execute_script(origin: Origin) {
 
     // check storage:
     let store = Mvm::move_vm_storage();
-    let oracle = MockOracle(None);
-    let state = State::new(store, oracle);
+    let state = State::new(store);
     let tag = StructTag {
         address: origin_move_addr(),
         module: Identifier::new(UserMod::Store.name()).unwrap(),

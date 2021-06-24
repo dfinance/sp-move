@@ -2,14 +2,13 @@
 
 use std::convert::TryFrom;
 use frame_support::dispatch::DispatchResultWithPostInfo as PsResult;
-use frame_system as system;
 use move_core_types::account_address::AccountAddress;
 use move_core_types::identifier::Identifier;
 use move_core_types::language_storage::ModuleId;
 use move_core_types::language_storage::StructTag;
 use move_core_types::language_storage::TypeTag;
+use move_vm::io::state::State;
 use move_vm_runtime::data_cache::RemoteCache;
-use move_vm::data::*;
 use move_vm::types::ModulePackage;
 
 use sp_mvm::storage::MoveVmStorage;
@@ -18,7 +17,7 @@ use super::assets::*;
 use super::mock::*;
 use super::addr::*;
 
-pub type AccountId = <Test as system::Config>::AccountId;
+pub type AccountId = <Test as frame_system::Config>::AccountId;
 
 /// Publish module __with__ storage check
 pub fn publish_module<Asset: BinAsset>(signer: AccountId, module: Asset) {
@@ -126,8 +125,7 @@ pub fn check_storage_mod_raw_with_addr<Bc: AsRef<[u8]>>(
 ) {
     let module_id = ModuleId::new(signer, Identifier::new(name).unwrap());
     let storage = Mvm::move_vm_storage();
-    let oracle = MockOracle(None);
-    let state = State::new(storage, oracle);
+    let state = State::new(storage);
     let stored = state
         .get_module(&module_id)
         .expect("VM state read storage")
@@ -141,8 +139,7 @@ where
     T: std::cmp::PartialEq + std::fmt::Debug,
 {
     let storage = Mvm::move_vm_storage();
-    let oracle = MockOracle(None);
-    let state = State::new(storage, oracle);
+    let state = State::new(storage);
     let blob = state
         .get_resource(&owner, &ty)
         .expect("VM state read storage (resource)")

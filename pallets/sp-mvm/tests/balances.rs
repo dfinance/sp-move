@@ -18,8 +18,13 @@ struct StoreU128 {
     pub val: u128,
 }
 
-fn check_storage_u128(address: AccountAddress, expected: u128) {
-    let expected = StoreU128 { val: expected };
+fn check_storage_u128<T>(address: AccountAddress, expected: T)
+where
+    T: Into<u128>,
+{
+    let expected = StoreU128 {
+        val: expected.into(),
+    };
     let tag = StructTag {
         address,
         module: Identifier::new(UserMod::Store.name()).unwrap(),
@@ -29,7 +34,7 @@ fn check_storage_u128(address: AccountAddress, expected: u128) {
     check_storage_res(address, tag, expected);
 }
 
-fn check_storage_pont(address: AccountAddress, expected: u128) {
+fn check_storage_pont(address: AccountAddress, expected: u64) {
     let tt = get_type_tag_balance_pont();
     check_storage_res(address, tt, expected);
 }
@@ -133,7 +138,7 @@ fn execute_deposit_withdraw_balance() {
 }
 
 mod adapter {
-    use move_vm::data::BalanceAccess;
+    use move_vm::io::traits::BalanceAccess;
     use sp_mvm::balance::BalancesAdapter;
     use sp_mvm::balance::boxed::BalancesAdapter as BoxedBalancesAdapter;
 
@@ -144,7 +149,7 @@ mod adapter {
             let origin = origin_ps_acc();
             let account = to_move_addr(origin.clone());
             let expected = balances::Pallet::<Test>::free_balance(&origin);
-            let value = adapter.get_balance(&account, "PONT");
+            let value = adapter.get_balance(&account, "PONT".as_bytes());
             assert_eq!(Some(expected), value);
         });
     }
@@ -157,7 +162,7 @@ mod adapter {
 
             let expected_balance = initial_balance / 2;
 
-            adapter.deposit(&account, "PONT", expected_balance);
+            adapter.add(&account, "PONT".as_bytes(), expected_balance);
 
             let actual_balance = balances::Pallet::<Test>::free_balance(&origin);
 
@@ -171,7 +176,7 @@ mod adapter {
             let account = to_move_addr(origin.clone());
             let initial_balance = balances::Pallet::<Test>::free_balance(&origin);
 
-            adapter.withdraw(&account, "PONT", initial_balance);
+            adapter.sub(&account, "PONT".as_bytes(), initial_balance);
 
             let actual_balance = balances::Pallet::<Test>::free_balance(&origin);
             assert_eq!(initial_balance * 2, actual_balance);

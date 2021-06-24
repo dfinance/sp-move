@@ -4,7 +4,7 @@ use crate::balance::BalancesAdapter;
 use crate::storage::*;
 
 /// Default type of Move VM implementation
-pub type DefaultVm<S, E, O, R> = Mvm<StorageAdapter<S>, E, O, BalancesAdapter<R>>;
+pub type DefaultVm<S, E, R> = Mvm<StorageAdapter<S>, E, BalancesAdapter<R>>;
 
 pub trait CreateMoveVm<T> {
     type Vm: move_vm::Vm;
@@ -25,13 +25,12 @@ pub trait TryCreateMoveVm<T> {
 pub use vm_static::*;
 #[cfg(not(feature = "no-vm-static"))]
 mod vm_static {
+    use move_vm::io::context::ExecutionContext;
     use move_vm::types::Gas;
     use move_vm::types::ScriptTx;
-    use move_vm::data::ExecutionContext;
 
-    use crate::oracle::DummyOracle;
-    use crate::storage::boxed::*;
     use crate::balance::boxed::BalancesAdapter;
+    use crate::storage::boxed::*;
     use crate::event::DefaultEventHandler;
     use super::{Mvm, TryCreateMoveVm};
 
@@ -41,8 +40,8 @@ mod vm_static {
     pub use once_cell::sync::OnceCell;
 
     /// Default type of Move VM implementation
-    pub type DefaultVm<E, O> = Mvm<VmStorageAdapter, E, O, BalancesAdapter>;
-    pub type VmWrapperTy = VmWrapper<DefaultVm<DefaultEventHandler, DummyOracle>>;
+    pub type DefaultVm<E> = Mvm<VmStorageAdapter, E, BalancesAdapter>;
+    pub type VmWrapperTy = VmWrapper<DefaultVm<DefaultEventHandler>>;
 
     /// New-type with unsafe impl Send + Sync.
     /// This is just wrapper around VM without Pin or ref-counting,

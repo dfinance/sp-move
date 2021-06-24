@@ -124,7 +124,7 @@ impl<T: Config> From<StatusCode> for Error<T> {
             StatusCode::INDEX_OUT_OF_BOUNDS => Self::IndexOutOfBounds,
             StatusCode::INVALID_SIGNATURE_TOKEN => Self::InvalidSignatureToken,
             StatusCode::RECURSIVE_STRUCT_DEFINITION => Self::RecursiveStructDefinition,
-            StatusCode::INVALID_RESOURCE_FIELD => Self::InvalidResourceField,
+            // StatusCode::INVALID_RESOURCE_FIELD => Self::InvalidResourceField,
             StatusCode::INVALID_FALL_THROUGH => Self::InvalidFallThrough,
             StatusCode::NEGATIVE_STACK_SIZE_WITHIN_BLOCK => Self::NegativeStackSizeWithinBlock,
             StatusCode::INVALID_MAIN_FUNCTION_SIGNATURE => Self::InvalidMainFunctionSignature,
@@ -134,7 +134,7 @@ impl<T: Config> From<StatusCode> for Error<T> {
             StatusCode::LOOKUP_FAILED => Self::LookupFailed,
             StatusCode::TYPE_MISMATCH => Self::TypeMismatch,
             StatusCode::MISSING_DEPENDENCY => Self::MissingDependency,
-            StatusCode::POP_RESOURCE_ERROR => Self::PopResourceError,
+            // StatusCode::POP_RESOURCE_ERROR => Self::PopResourceError,
             StatusCode::BR_TYPE_MISMATCH_ERROR => Self::BrTypeMismatchError,
             StatusCode::ABORT_TYPE_MISMATCH_ERROR => Self::AbortTypeMismatchError,
             StatusCode::STLOC_TYPE_MISMATCH_ERROR => Self::StlocTypeMismatchError,
@@ -156,7 +156,6 @@ impl<T: Config> From<StatusCode> for Error<T> {
                 Self::BorrowfieldExistsMutableBorrowError
             }
             StatusCode::COPYLOC_UNAVAILABLE_ERROR => Self::CopylocUnavailableError,
-            StatusCode::COPYLOC_RESOURCE_ERROR => Self::CopylocResourceError,
             StatusCode::COPYLOC_EXISTS_BORROW_ERROR => Self::CopylocExistsBorrowError,
             StatusCode::MOVELOC_UNAVAILABLE_ERROR => Self::MovelocUnavailableError,
             StatusCode::MOVELOC_EXISTS_BORROW_ERROR => Self::MovelocExistsBorrowError,
@@ -170,12 +169,12 @@ impl<T: Config> From<StatusCode> for Error<T> {
             StatusCode::PACK_TYPE_MISMATCH_ERROR => Self::PackTypeMismatchError,
             StatusCode::UNPACK_TYPE_MISMATCH_ERROR => Self::UnpackTypeMismatchError,
             StatusCode::READREF_TYPE_MISMATCH_ERROR => Self::ReadrefTypeMismatchError,
-            StatusCode::READREF_RESOURCE_ERROR => Self::ReadrefResourceError,
+            // StatusCode::READREF_RESOURCE_ERROR => Self::ReadrefResourceError,
             StatusCode::READREF_EXISTS_MUTABLE_BORROW_ERROR => {
                 Self::ReadrefExistsMutableBorrowError
             }
             StatusCode::WRITEREF_TYPE_MISMATCH_ERROR => Self::WriterefTypeMismatchError,
-            StatusCode::WRITEREF_RESOURCE_ERROR => Self::WriterefResourceError,
+            // StatusCode::WRITEREF_RESOURCE_ERROR => Self::WriterefResourceError,
             StatusCode::WRITEREF_EXISTS_BORROW_ERROR => Self::WriterefExistsBorrowError,
             StatusCode::WRITEREF_NO_MUTABLE_REFERENCE_ERROR => {
                 Self::WriterefNoMutableReferenceError
@@ -183,34 +182,34 @@ impl<T: Config> From<StatusCode> for Error<T> {
             StatusCode::INTEGER_OP_TYPE_MISMATCH_ERROR => Self::IntegerOpTypeMismatchError,
             StatusCode::BOOLEAN_OP_TYPE_MISMATCH_ERROR => Self::BooleanOpTypeMismatchError,
             StatusCode::EQUALITY_OP_TYPE_MISMATCH_ERROR => Self::EqualityOpTypeMismatchError,
-            StatusCode::EXISTS_RESOURCE_TYPE_MISMATCH_ERROR => {
-                Self::ExistsResourceTypeMismatchError
-            }
+            // StatusCode::EXISTS_RESOURCE_TYPE_MISMATCH_ERROR => {
+            // Self::ExistsResourceTypeMismatchError
+            // }
             StatusCode::BORROWGLOBAL_TYPE_MISMATCH_ERROR => Self::BorrowglobalTypeMismatchError,
-            StatusCode::BORROWGLOBAL_NO_RESOURCE_ERROR => Self::BorrowglobalNoResourceError,
+            // StatusCode::BORROWGLOBAL_NO_RESOURCE_ERROR => Self::BorrowglobalNoResourceError,
             StatusCode::MOVEFROM_TYPE_MISMATCH_ERROR => Self::MovefromTypeMismatchError,
-            StatusCode::MOVEFROM_NO_RESOURCE_ERROR => Self::MovefromNoResourceError,
+            // StatusCode::MOVEFROM_NO_RESOURCE_ERROR => Self::MovefromNoResourceError,
             StatusCode::MOVETO_TYPE_MISMATCH_ERROR => Self::MovetoTypeMismatchError,
-            StatusCode::MOVETO_NO_RESOURCE_ERROR => Self::MovetoNoResourceError,
+            // StatusCode::MOVETO_NO_RESOURCE_ERROR => Self::MovetoNoResourceError,
             StatusCode::MODULE_ADDRESS_DOES_NOT_MATCH_SENDER => {
                 Self::ModuleAddressDoesNotMatchSender
             }
             StatusCode::NO_MODULE_HANDLES => Self::NoModuleHandles,
             StatusCode::POSITIVE_STACK_SIZE_AT_BLOCK_END => Self::PositiveStackSizeAtBlockEnd,
-            StatusCode::MISSING_ACQUIRES_RESOURCE_ANNOTATION_ERROR => {
-                Self::MissingAcquiresResourceAnnotationError
-            }
-            StatusCode::EXTRANEOUS_ACQUIRES_RESOURCE_ANNOTATION_ERROR => {
-                Self::ExtraneousAcquiresResourceAnnotationError
-            }
-            StatusCode::DUPLICATE_ACQUIRES_RESOURCE_ANNOTATION_ERROR => {
-                Self::DuplicateAcquiresResourceAnnotationError
-            }
-            StatusCode::INVALID_ACQUIRES_RESOURCE_ANNOTATION_ERROR => {
-                Self::InvalidAcquiresResourceAnnotationError
-            }
+            // StatusCode::MISSING_ACQUIRES_RESOURCE_ANNOTATION_ERROR => {
+            //     Self::MissingAcquiresResourceAnnotationError
+            // }
+            // StatusCode::EXTRANEOUS_ACQUIRES_RESOURCE_ANNOTATION_ERROR => {
+            //     Self::ExtraneousAcquiresResourceAnnotationError
+            // }
+            // StatusCode::DUPLICATE_ACQUIRES_RESOURCE_ANNOTATION_ERROR => {
+            //     Self::DuplicateAcquiresResourceAnnotationError
+            // }
+            // StatusCode::INVALID_ACQUIRES_RESOURCE_ANNOTATION_ERROR => {
+            //     Self::InvalidAcquiresResourceAnnotationError
+            // }
             StatusCode::GLOBAL_REFERENCE_ERROR => Self::GlobalReferenceError,
-            StatusCode::CONSTRAINT_KIND_MISMATCH => Self::ConstraintKindMismatch,
+            // StatusCode::CONSTRAINT_KIND_MISMATCH => Self::ConstraintKindMismatch,
             StatusCode::NUMBER_OF_TYPE_ARGUMENTS_MISMATCH => Self::NumberOfTypeArgumentsMismatch,
             StatusCode::LOOP_IN_INSTANTIATION_GRAPH => Self::LoopInInstantiationGraph,
             StatusCode::ZERO_SIZED_STRUCT => Self::ZeroSizedStruct,
@@ -221,7 +220,7 @@ impl<T: Config> From<StatusCode> for Error<T> {
             StatusCode::INVALID_LOOP_SPLIT => Self::InvalidLoopSplit,
             StatusCode::INVALID_LOOP_BREAK => Self::InvalidLoopBreak,
             StatusCode::INVALID_LOOP_CONTINUE => Self::InvalidLoopContinue,
-            StatusCode::UNSAFE_RET_UNUSED_RESOURCES => Self::UnsafeRetUnusedResources,
+            // StatusCode::UNSAFE_RET_UNUSED_RESOURCES => Self::UnsafeRetUnusedResources,
             StatusCode::TOO_MANY_LOCALS => Self::TooManyLocals,
             StatusCode::GENERIC_MEMBER_OPCODE_MISMATCH => Self::GenericMemberOpcodeMismatch,
             StatusCode::FUNCTION_RESOLUTION_FAILURE => Self::FunctionResolutionFailure,
@@ -258,8 +257,8 @@ impl<T: Config> From<StatusCode> for Error<T> {
             StatusCode::BAD_HEADER_TABLE => Self::BadHeaderTable,
             StatusCode::UNEXPECTED_SIGNATURE_TYPE => Self::UnexpectedSignatureType,
             StatusCode::DUPLICATE_TABLE => Self::DuplicateTable,
-            StatusCode::UNKNOWN_NOMINAL_RESOURCE => Self::UnknownNominalResource,
-            StatusCode::UNKNOWN_KIND => Self::UnknownKind,
+            // StatusCode::UNKNOWN_NOMINAL_RESOURCE => Self::UnknownNominalResource,
+            // StatusCode::UNKNOWN_KIND => Self::UnknownKind,
             StatusCode::UNKNOWN_NATIVE_STRUCT_FLAG => Self::UnknownNativeStructFlag,
             StatusCode::BAD_U64 => Self::BadU64,
             StatusCode::BAD_U128 => Self::BadU128,
@@ -281,6 +280,56 @@ impl<T: Config> From<StatusCode> for Error<T> {
             StatusCode::UNKNOWN_STATUS => Self::UnknownStatus,
 
             StatusCode::EXECUTED => unreachable!(),
+
+            StatusCode::BAD_TRANSACTION_FEE_CURRENCY => Self::BadTransactionFeeCurrency,
+            StatusCode::FEATURE_UNDER_GATING => Self::FeatureUnderGating,
+            StatusCode::FIELD_MISSING_TYPE_ABILITY => Self::FieldMissingTypeAbility,
+            StatusCode::POP_WITHOUT_DROP_ABILITY => Self::PopWithoutDropAbility,
+            StatusCode::COPYLOC_WITHOUT_COPY_ABILITY => Self::CopylocWithoutCopyAbility,
+            StatusCode::READREF_WITHOUT_COPY_ABILITY => Self::ReadrefWithoutCopyAbility,
+            StatusCode::WRITEREF_WITHOUT_DROP_ABILITY => Self::WriterefWithoutDropAbility,
+            StatusCode::EXISTS_WITHOUT_KEY_ABILITY_OR_BAD_ARGUMENT => {
+                Self::ExistsWithoutKeyAbilityOrBadArgument
+            }
+            StatusCode::BORROWGLOBAL_WITHOUT_KEY_ABILITY => Self::BorrowglobalWithoutKeyAbility,
+            StatusCode::MOVEFROM_WITHOUT_KEY_ABILITY => Self::MovefromWithoutKeyAbility,
+            StatusCode::MOVETO_WITHOUT_KEY_ABILITY => Self::MovetoWithoutKeyAbility,
+            StatusCode::MISSING_ACQUIRES_ANNOTATION => Self::MissingAcquiresAnnotation,
+            StatusCode::EXTRANEOUS_ACQUIRES_ANNOTATION => Self::ExtraneousAcquiresAnnotation,
+            StatusCode::DUPLICATE_ACQUIRES_ANNOTATION => Self::DuplicateAcquiresAnnotation,
+            StatusCode::INVALID_ACQUIRES_ANNOTATION => Self::InvalidAcquiresAnnotation,
+            StatusCode::CONSTRAINT_NOT_SATISFIED => Self::ConstraintNotSatisfied,
+            StatusCode::UNSAFE_RET_UNUSED_VALUES_WITHOUT_DROP => {
+                Self::UnsafeRetUnusedValuesWithoutDrop
+            }
+            StatusCode::BACKWARD_INCOMPATIBLE_MODULE_UPDATE => {
+                Self::BackwardIncompatibleModuleUpdate
+            }
+            StatusCode::CYCLIC_MODULE_DEPENDENCY => Self::CyclicModuleDependency,
+            StatusCode::NUMBER_OF_ARGUMENTS_MISMATCH => Self::NumberOfArgumentsMismatch,
+            StatusCode::INVALID_PARAM_TYPE_FOR_DESERIALIZATION => {
+                Self::InvalidParamTypeForDeserialization
+            }
+            StatusCode::FAILED_TO_DESERIALIZE_ARGUMENT => Self::FailedToDeserializeArgument,
+            StatusCode::NUMBER_OF_SIGNER_ARGUMENTS_MISMATCH => {
+                Self::NumberOfSignerArgumentsMismatch
+            }
+            StatusCode::CALLED_SCRIPT_VISIBLE_FROM_NON_SCRIPT_VISIBLE => {
+                Self::CalledScriptVisibleFromNonScriptVisible
+            }
+            StatusCode::EXECUTE_SCRIPT_FUNCTION_CALLED_ON_NON_SCRIPT_VISIBLE => {
+                Self::ExecuteScriptFunctionCalledOnNonScriptVisible
+            }
+            StatusCode::INVALID_FRIEND_DECL_WITH_SELF => Self::InvalidFriendDeclWithSelf,
+            StatusCode::INVALID_FRIEND_DECL_WITH_MODULES_OUTSIDE_ACCOUNT_ADDRESS => {
+                Self::InvalidFriendDeclWithModulesOutsideAccountAddress
+            }
+            StatusCode::INVALID_FRIEND_DECL_WITH_MODULES_IN_DEPENDENCIES => {
+                Self::InvalidFriendDeclWithModulesInDependencies
+            }
+            StatusCode::CYCLIC_MODULE_FRIENDSHIP => Self::CyclicModuleFriendship,
+            StatusCode::UNKNOWN_ABILITY => Self::UnknownAbility,
+            StatusCode::INVALID_FLAG_BITS => Self::InvalidFlagBits,
         }
     }
 }
