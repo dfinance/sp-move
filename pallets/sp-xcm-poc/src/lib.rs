@@ -3,7 +3,6 @@
 use sp_std::prelude::*;
 use sp_runtime::traits::Saturating;
 use frame_system::Config as SystemConfig;
-use cumulus_primitives_core::ParaId;
 use cumulus_pallet_xcm::{Origin as CumulusOrigin};
 use xcm::v0::{Xcm, Error as XcmError, SendXcm, OriginKind, MultiLocation, Junction};
 
@@ -34,8 +33,8 @@ pub mod pallet {
 	#[pallet::generate_deposit(pub(super) fn deposit_event)]
 	#[pallet::metadata(T::BlockNumber = "BlockNumber")]
 	pub enum Event<T: Config> {
-		PingSent(ParaId, u64),
-		ErrorSendingPing(XcmError, ParaId, Vec<u8>),
+		PingSent(u32, u64),
+		ErrorSendingPing(XcmError, u32, Vec<u8>),
 	}
 
 	#[pallet::error]
@@ -44,13 +43,13 @@ pub mod pallet {
 	#[pallet::call]
 	impl<T: Config> Pallet<T> {
 		#[pallet::weight(0)]
-		pub fn execute_on_parachain(origin: OriginFor<T>, para_id: ParaId, payload: Vec<u8>) -> DispatchResult {
+		pub fn execute_on_parachain(origin: OriginFor<T>, para_id: u32, payload: Vec<u8>) -> DispatchResult {
 			// Only accept pings from other chains.
 			let para = ensure_signed(origin)?;
             let call = sp_mvm::pallet::Call::<<T as Config>::MvmConfig>::execute(payload.clone(), 1_000_000).encode().into();
 
 			match T::XcmSender::send_xcm(
-				MultiLocation::X2(Junction::Parent, Junction::Parachain(para_id.into())),
+				MultiLocation::X2(Junction::Parent, Junction::Parachain(para_id)),
 				Xcm::Transact {
 					origin_type: OriginKind::Native,
 					require_weight_at_most: 1_000_000,
