@@ -72,6 +72,7 @@ cumulus-primitives-timestamp = { default-features = false, git = 'https://github
 # local dependencies
 sp-mvm = { path = '../pallets/sp-mvm', default-features = false }
 sp-mvm-rpc-runtime = { path = '../pallets/sp-mvm/rpc/runtime', default-features = false }
+sp-xcm-poc = { path = '../pallets/sp-xcm-poc', default-features = false }
 
 [features]
 default = ['std']
@@ -123,6 +124,7 @@ std = [
     'sp-transaction-pool/std',
     'sp-version/std',
     'sp-mvm/std',
+    'sp-xcm-poc/std',
     'xcm/std',
     'xcm-builder/std',
     'xcm-executor/std'

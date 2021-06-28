@@ -4929,6 +4929,7 @@ dependencies = [
  "sp-std",
  "sp-transaction-pool",
  "sp-version",
+ "sp-xcm-poc",
  "substrate-wasm-builder 4.0.0",
  "xcm",
  "xcm-builder",
@@ -10313,6 +10314,22 @@ dependencies = [
  "parity-scale-codec 2.1.1",
  "sp-std",
  "wasmi",
+]
+
+[[package]]
+name = "sp-xcm-poc"
+version = "0.1.0"
+dependencies = [
+ "cumulus-pallet-xcm",
+ "cumulus-primitives-core",
+ "frame-support",
+ "frame-system",
+ "parity-scale-codec 2.1.1",
+ "serde",
+ "sp-mvm",
+ "sp-runtime",
+ "sp-std",
+ "xcm",
 ]
 
 [[package]]

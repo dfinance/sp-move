@@ -54,6 +54,7 @@ use frame_system::limits::{BlockLength, BlockWeights};
 pub use sp_mvm;
 pub use sp_mvm::gas::{GasWeightMapping};
 pub use sp_mvm_rpc_runtime::types::MVMApiEstimation;
+pub use sp_xcm_poc;
 
 /// An index to a block.
 pub type BlockNumber = u32;
@@ -476,6 +477,12 @@ impl cumulus_pallet_parachain_system::CheckInherents<Block> for CheckInherents {
     }
 }
 
+impl sp_xcm_poc::Config for Runtime {
+    type Event = Event;
+    type MvmConfig = Self;
+    type XcmSender = XcmRouter;
+}
+
 // Create the runtime by composing the FRAME pallets that were previously configured.
 construct_runtime!(
     pub enum Runtime where
@@ -504,6 +511,9 @@ construct_runtime!(
 
         // Move VM
         Mvm: sp_mvm::{Pallet, Call, Storage, Event<T>},
+
+        // XCM PoC
+        XcmPoc: sp_xcm_poc::{Pallet, Call, Event<T>},
     }
 );
 
