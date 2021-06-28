@@ -45,6 +45,18 @@
 					"flags": ["--alice", "--force-authoring", "--", "--execution=wasm"]
 				}
 			]
+		},
+		{
+			"bin": "./target/release/mv-node",
+			"id": "2005",
+			"balance": "1000000000000000000000",
+			"nodes": [
+				{
+					"wsPort": 9989,
+					"port": 31220,
+					"flags": ["--alice", "--force-authoring", "--", "--execution=wasm"]
+				}
+			]
 		}
 	],
 	"simpleParachains": [

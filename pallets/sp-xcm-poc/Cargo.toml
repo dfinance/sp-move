@@ -16,10 +16,8 @@ frame-system = { git = "https://github.com/paritytech/substrate", default-featur
 
 xcm = { git = "https://github.com/paritytech/polkadot", default-features = false, branch = "release-v0.9.6" }
 
-cumulus-pallet-xcm = { git = "https://github.com/paritytech/cumulus", default-features = false, branch = "polkadot-v0.9.6" }
-
 # we depend on sp-mvm
-sp-mvm = { path = "../sp-mvm" }
+sp-mvm = { path = "../sp-mvm", default-features = false }
 
 [features]
 default = ["std"]

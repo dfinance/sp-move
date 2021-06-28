@@ -3,7 +3,6 @@
 use sp_std::prelude::*;
 use sp_runtime::traits::Saturating;
 use frame_system::Config as SystemConfig;
-use cumulus_pallet_xcm::{Origin as CumulusOrigin};
 use xcm::v0::{Xcm, Error as XcmError, SendXcm, OriginKind, MultiLocation, Junction};
 
 pub use pallet::*;
