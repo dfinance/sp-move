@@ -55,6 +55,7 @@ use frame_system::limits::{BlockLength, BlockWeights};
 pub use sp_mvm;
 pub use sp_mvm::gas::{GasWeightMapping};
 pub use sp_mvm_rpc_runtime::types::MVMApiEstimation;
+pub use sp_xcm_poc;
 
 /// An index to a block.
 pub type BlockNumber = u32;
@@ -457,6 +458,28 @@ impl sp_mvm::Config for Runtime {
     type GasWeightMapping = MoveVMGasWeightMapping;
 }
 
+struct CheckInherents;
+
+impl cumulus_pallet_parachain_system::CheckInherents<Block> for CheckInherents {
+    fn check_inherents(block: &Block, relay_state_proof: &cumulus_pallet_parachain_system::RelayChainStateProof) -> frame_support::inherent::CheckInherentsResult {
+        let relay_chain_slot = relay_state_proof.read_slot().expect("Could not read the relay chain sloto from the proof");
+
+        let inherent_data = cumulus_primitives_timestamp::InherentDataProvider::from_relay_chain_slot_and_duration(
+            relay_chain_slot,
+            sp_std::time::Duration::from_secs(6),
+                                                                                                                  )
+            .create_inherent_data()
+            .expect("Could not create the timestamp inherent data");
+        inherent_data.check_extrinsics(&block)
+    }
+}
+
+impl sp_xcm_poc::Config for Runtime {
+    type Event = Event;
+    type MvmConfig = Self;
+    type XcmSender = XcmRouter;
+}
+
 // Create the runtime by composing the FRAME pallets that were previously configured.
 construct_runtime!(
     pub enum Runtime where
@@ -485,6 +508,9 @@ construct_runtime!(
 
         // Move VM
         Mvm: sp_mvm::{Pallet, Call, Storage, Event<T>},
+
+        // XCM PoC
+        XcmPoc: sp_xcm_poc::{Pallet, Call, Event<T>},
     }
 );
 
