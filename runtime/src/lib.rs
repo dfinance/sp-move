@@ -25,7 +25,7 @@ use xcm_builder::{
     AccountId32Aliases, CurrencyAdapter, LocationInverter, ParentIsDefault, RelayChainAsNative,
     SiblingParachainAsNative, SiblingParachainConvertsVia, SignedAccountId32AsNative,
     SovereignSignedViaLocation, EnsureXcmOrigin, AllowUnpaidExecutionFrom, ParentAsSuperuser,
-    AllowTopLevelPaidExecutionFrom, TakeWeightCredit, FixedWeightBounds, IsConcrete, NativeAsset,
+    AllowTopLevelPaidExecutionFrom, TakeWeightCredit, IsConcrete, NativeAsset,
     UsingComponents, SignedToAccountId32,
 };
 use xcm_executor::{Config, XcmExecutor};
@@ -379,7 +379,7 @@ impl Config for XcmConfig {
     type IsTeleporter = NativeAsset; // <- should be enough to allow teleportation of ROC
     type LocationInverter = LocationInverter<Ancestry>;
     type Barrier = Barrier;
-    type Weigher = FixedWeightBounds<UnitWeightCost, Call>;
+    type Weigher = MyWeightBounds<UnitWeightCost, Call>;
     type Trader = UsingComponents<IdentityFee<Balance>, RelayLocation, AccountId, Balances, ()>;
     type ResponseHandler = (); // Don't handle responses for now.
 }
@@ -396,6 +396,42 @@ pub type XcmRouter = (
     XcmpQueue,
 );
 
+use sp_std::{result::Result, marker::PhantomData, convert::TryInto};
+use codec::Decode;
+use xcm::v0::Order;
+use frame_support::traits::Get;
+use frame_support::weights::GetDispatchInfo;
+use xcm_executor::traits::WeightBounds;
+pub struct MyWeightBounds<T, C>(PhantomData<(T, C)>);
+impl<T: Get<Weight>, C: Decode + GetDispatchInfo> WeightBounds<C> for MyWeightBounds<T, C> {
+	fn shallow(message: &mut Xcm<C>) -> Result<Weight, ()> {
+		Ok(T::get())
+	}
+	fn deep(message: &mut Xcm<C>) -> Result<Weight, ()> {
+		Ok(match message {
+			Xcm::RelayedFrom { ref mut message, .. } => Self::deep(message.as_mut())?,
+			Xcm::WithdrawAsset { effects, .. }
+			| Xcm::ReserveAssetDeposit { effects, .. }
+			| Xcm::TeleportAsset { effects, .. }
+			=> {
+				let mut extra = 0;
+				for effect in effects.iter_mut() {
+					match effect {
+						Order::BuyExecution { xcm, .. } => {
+							for message in xcm.iter_mut() {
+								extra += Self::shallow(message)? + Self::deep(message)?;
+							}
+						},
+						_ => {}
+					}
+				}
+				extra
+			},
+			_ => 0,
+		})
+	}
+}
+
 impl pallet_xcm::Config for Runtime {
     type Event = Event;
     type SendXcmOrigin = EnsureXcmOrigin<Origin, LocalOriginToLocation>;
@@ -405,7 +441,7 @@ impl pallet_xcm::Config for Runtime {
     type XcmExecuteFilter = All<(MultiLocation, Xcm<Call>)>;
     type XcmTeleportFilter = All<(MultiLocation, Vec<MultiAsset>)>;
     type XcmReserveTransferFilter = ();
-    type Weigher = FixedWeightBounds<UnitWeightCost, Call>;
+    type Weigher = MyWeightBounds<UnitWeightCost, Call>;
 }
 
 impl cumulus_pallet_xcm::Config for Runtime {
@@ -458,21 +494,6 @@ impl sp_mvm::Config for Runtime {
     type GasWeightMapping = MoveVMGasWeightMapping;
 }
 
-struct CheckInherents;
-
-impl cumulus_pallet_parachain_system::CheckInherents<Block> for CheckInherents {
-    fn check_inherents(block: &Block, relay_state_proof: &cumulus_pallet_parachain_system::RelayChainStateProof) -> frame_support::inherent::CheckInherentsResult {
-        let relay_chain_slot = relay_state_proof.read_slot().expect("Could not read the relay chain sloto from the proof");
-
-        let inherent_data = cumulus_primitives_timestamp::InherentDataProvider::from_relay_chain_slot_and_duration(
-            relay_chain_slot,
-            sp_std::time::Duration::from_secs(6),
-                                                                                                                  )
-            .create_inherent_data()
-            .expect("Could not create the timestamp inherent data");
-        inherent_data.check_extrinsics(&block)
-    }
-}
 
 impl sp_xcm_poc::Config for Runtime {
     type Event = Event;

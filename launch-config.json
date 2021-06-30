@@ -42,7 +42,7 @@
 				{
 					"wsPort": 9988,
 					"port": 31200,
-					"flags": ["--alice", "--force-authoring", "--", "--execution=wasm"]
+					"flags": ["--alice", "--", "--execution=wasm"]
 				}
 			]
 		},
@@ -54,7 +54,7 @@
 				{
 					"wsPort": 9989,
 					"port": 31220,
-					"flags": ["--alice", "--force-authoring", "--", "--execution=wasm"]
+					"flags": ["--alice", "--", "--execution=wasm"]
 				}
 			]
 		}
@@ -62,6 +62,18 @@
 	"simpleParachains": [
 	],
 	"hrmpChannels": [
+        {
+            "sender": 2000,
+            "recipient": 2005,
+            "maxCapacity": 8,
+            "maxMessageSize": 512
+        },
+        {
+            "sender": 2005,
+            "recipient": 2000,
+            "maxCapacity": 8,
+            "maxMessageSize": 512
+        }
 	],
 	"types": {},
 	"finalization": false
