@@ -362,9 +362,7 @@ match_type! {
 }
 
 pub type Barrier = (
-    TakeWeightCredit,
-    AllowTopLevelPaidExecutionFrom<All<MultiLocation>>,
-    AllowUnpaidExecutionFrom<ParentOrParentsUnitPlurality>,
+    AllowUnpaidExecutionFrom<All<MultiLocation>>,
     // ^^^ Parent & its unit plurality gets free execution
 );
 
@@ -499,6 +497,7 @@ impl sp_xcm_poc::Config for Runtime {
     type Event = Event;
     type MvmConfig = Self;
     type XcmSender = XcmRouter;
+    type Call = Call;
 }
 
 // Create the runtime by composing the FRAME pallets that were previously configured.

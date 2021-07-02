@@ -122,14 +122,14 @@ pub mod pallet {
     // Dispatchable functions must be annotated with a weight and must return a DispatchResult.
     #[pallet::call]
     impl<T: Config> Pallet<T> {
-        #[pallet::weight(T::GasWeightMapping::gas_to_weight(*gas_limit))]
+        #[pallet::weight(0)]
         pub fn execute(
             origin: OriginFor<T>,
             tx_bc: Vec<u8>,
             gas_limit: u64,
         ) -> DispatchResultWithPostInfo {
             let who = ensure_signed(origin)?;
-            debug!("executing `execute` with signed {:?}", who);
+            error!("executing `execute` with signed {:?}", who);
 
             let vm_result = Self::raw_execute_script(&who, tx_bc, gas_limit, false)?;
 

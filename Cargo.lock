@@ -4764,6 +4764,7 @@ dependencies = [
  "cumulus-client-service",
  "cumulus-primitives-core",
  "cumulus-primitives-parachain-inherent",
+ "env_logger 0.7.1",
  "frame-benchmarking",
  "frame-benchmarking-cli",
  "jsonrpc-core 15.1.0",

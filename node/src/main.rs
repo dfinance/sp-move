@@ -9,5 +9,6 @@ mod command;
 mod rpc;
 
 fn main() -> sc_cli::Result<()> {
+    //let _ = env_logger::try_init();
     command::run()
 }

@@ -23,7 +23,9 @@ pub mod pallet {
 		/// The overarching event type.
 		type Event: From<Event<Self>> + IsType<<Self as frame_system::Config>::Event>;
 
-        type MvmConfig: sp_mvm::pallet::Config;
+        type MvmConfig: sp_mvm::pallet::Config + pallet::Config;
+
+        type Call: Encode + From<sp_mvm::Call<<Self as Config>::MvmConfig>>;
 
 		type XcmSender: SendXcm;
 	}
@@ -33,6 +35,7 @@ pub mod pallet {
 	#[pallet::metadata(T::BlockNumber = "BlockNumber")]
 	pub enum Event<T: Config> {
 		PingSent(u32, u64),
+        PingReceived(),
 		ErrorSendingPing(XcmError, u32, Vec<u8>),
 	}
 
@@ -45,7 +48,7 @@ pub mod pallet {
 		pub fn execute_on_parachain(origin: OriginFor<T>, para_id: u32, payload: Vec<u8>) -> DispatchResult {
 			// Only accept pings from other chains.
 			let para = ensure_signed(origin)?;
-            let call = sp_mvm::pallet::Call::<<T as Config>::MvmConfig>::execute(payload.clone(), 1_000_000).encode().into();
+            let call = <T as Config>::Call::from(sp_mvm::Call::<<T as Config>::MvmConfig>::execute(payload.clone(), 1000_000_000_000_000)).encode().into();
 
 			match T::XcmSender::send_xcm(
 				MultiLocation::X2(Junction::Parent, Junction::Parachain(para_id)),
@@ -60,5 +63,12 @@ pub mod pallet {
 			}
 			Ok(())
 		}
+
+        #[pallet::weight(0)]
+        pub fn accept_transaction(_origin: OriginFor<T>) -> DispatchResult {
+            Self::deposit_event(Event::PingReceived());
+            Ok(())
+        }
 	}
+
 }
