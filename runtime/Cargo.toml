@@ -21,6 +21,7 @@ version = '2.0.0'
 
 [dependencies]
 hex-literal = { optional = true, version = '0.3.1' }
+log = { version = "0.4", default-features = false }
 serde = { version = "1.0.119", optional = true, features = [ "derive" ] } # / 1.0.101
 
 # Substrate dependencies
@@ -89,6 +90,7 @@ runtime-benchmarks = [
     'sp-mvm/runtime-benchmarks',
 ]
 std = [
+    'log/std',
     'codec/std',
     'serde',
     'frame-executive/std',
