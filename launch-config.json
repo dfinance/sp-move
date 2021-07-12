@@ -6,22 +6,26 @@
 			{
 				"name": "alice",
 				"wsPort": 9944,
-				"port": 30444
+				"port": 30444,
+                "flags": ["-linfo"]
 			},
 			{
 				"name": "bob",
 				"wsPort": 9955,
-				"port": 30555
+				"port": 30555,
+                "flags": ["-linfo"]
 			},
 			{
 				"name": "charlie",
 				"wsPort": 9966,
-				"port": 30666
+				"port": 30666,
+                "flags": ["-linfo"]
 			},
 			{
 				"name": "dave",
 				"wsPort": 9977,
-				"port": 30777
+				"port": 30777,
+                "flags": ["-linfo"]
 			}
 		],
 		"runtime_genesis_config": {
@@ -42,7 +46,7 @@
 				{
 					"wsPort": 9988,
 					"port": 31200,
-					"flags": ["--alice", "--", "--execution=wasm"]
+					"flags": ["-linfo", "--alice", "--", "--execution=wasm"]
 				}
 			]
 		},
@@ -54,7 +58,7 @@
 				{
 					"wsPort": 9989,
 					"port": 31220,
-					"flags": ["--alice", "--", "--execution=wasm"]
+					"flags": ["-linfo", "--alice", "--", "--execution=wasm"]
 				}
 			]
 		}
