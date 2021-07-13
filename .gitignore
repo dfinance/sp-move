@@ -12,3 +12,6 @@
 # Dove temp cache/lock-file
 .Dove.man
 /pallets/**/target/
+
+# .log files created by polkadot-launch
+*.log

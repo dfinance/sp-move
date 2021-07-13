@@ -320,10 +320,10 @@ pub mod pallet {
             };
 
             let ctx = {
-                let height = frame_system::Module::<T>::block_number()
+                let height = frame_system::Pallet::<T>::block_number()
                     .try_into()
                     .map_err(|_| Error::<T>::NumConversionError)?;
-                let time = <timestamp::Module<T> as UnixTime>::now().as_millis() as u64;
+                let time = <timestamp::Pallet<T> as UnixTime>::now().as_millis() as u64;
                 ExecutionContext::new(time, height as u64)
             };
 

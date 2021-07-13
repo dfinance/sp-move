@@ -23,6 +23,31 @@ Current status:
 
 Read [official documentation](https://docs.pontem.network/02.-getting-started/local_node).
 
+## Local Parachain Launch
+
+To launch `mv-node` locally, use [`polkadot-launch`](https://github.com/paritytech/polkadot-launch) tool.
+
+**Note:** you must have polkadot node `v0.9.3` compiled and placed in `../polkadot/target/release/`.
+To use different localion you can modify `./launch-config.json`.
+
+```sh
+# compile polkadot v0.9.3
+cd polkadot
+git checkout release-v0.9.3
+cargo build --release
+
+# run mv-node
+cd sp-move
+polkadot-launch ./launch-config.json
+```
+
+Observe `9988.log` to verify that the node was launched successfully and is producing blocks. Web UI can connect to 
+`localhost:9988` WS port.
+
+```sh
+tail -f ./9988.log
+```
+
 ## Register PONT coin
 
 We need to register PONT coin information, so create new project using dove and write new script:

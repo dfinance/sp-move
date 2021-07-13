@@ -17,7 +17,7 @@ use crate::benchmarking::store::container;
 
 use super::*;
 #[allow(unused)]
-use super::Module as Mvm;
+use super::Pallet as Mvm;
 
 benchmarks! {
     publish_std {

@@ -22,6 +22,14 @@ type Block = frame_system::mocking::MockBlock<Test>;
 /// Initial balance for all existent test accounts
 pub const INITIAL_BALANCE: <Test as balances::Config>::Balance = 42000;
 
+/// Balance of an account.
+pub type Balance = u128;
+
+// Unit = the base number of indivisible units for balances
+pub const UNIT: Balance = 1_000_000_000_000;
+pub const MILLIUNIT: Balance = 1_000_000_000;
+pub const MICROUNIT: Balance = 1_000_000;
+
 // Configure a mock runtime to test the pallet.
 frame_support::construct_runtime!(
     pub enum Test where
@@ -29,10 +37,10 @@ frame_support::construct_runtime!(
         NodeBlock = Block,
         UncheckedExtrinsic = UncheckedExtrinsic,
     {
-        System: frame_system::{Module, Call, Config, Storage, Event<T>},
-        Timestamp: timestamp::{Module, Call, Storage, Inherent},
-        Balances: balances::{Module, Call, Storage, Config<T>, Event<T>},
-        Mvm: sp_mvm::{Module, Call, Storage, Event<T>},
+        System: frame_system::{Pallet, Call, Config, Storage, Event<T>},
+        Timestamp: timestamp::{Pallet, Call, Storage, Inherent},
+        Balances: balances::{Pallet, Call, Storage, Config<T>, Event<T>},
+        Mvm: sp_mvm::{Pallet, Call, Storage, Event<T>},
         // Sudo: pallet_sudo::{Module, Call, Config<T>, Storage, Event<T>},
     }
 );
@@ -66,6 +74,7 @@ impl system::Config for Test {
     type OnKilledAccount = ();
     type SystemWeightInfo = ();
     type SS58Prefix = SS58Prefix;
+    type OnSetCode = ();
 }
 
 // --- gas --- //
@@ -108,8 +117,12 @@ impl timestamp::Config for Test {
 // --- balances --- //
 
 parameter_types! {
-    pub const ExistentialDeposit: u128 = 1;
+    pub const ExistentialDeposit: u128 = 1 * MILLIUNIT;
+    pub const TransferFee: u128 = 1 * MILLIUNIT;
+    pub const CreationFee: u128 = 1 * MILLIUNIT;
+    pub const TransactionByteFee: u128 = 1 * MILLIUNIT;
     pub const MaxLocks: u32 = 50;
+    pub const MaxReserves: u32 = 50;
 }
 
 impl balances::Config for Test {
@@ -122,6 +135,8 @@ impl balances::Config for Test {
     type ExistentialDeposit = ExistentialDeposit;
     type AccountStore = Sys;
     type WeightInfo = balances::weights::SubstrateWeight<Self>;
+    type MaxReserves = MaxReserves;
+    type ReserveIdentifier = [u8; 8];
 }
 
 // ----------------- //
@@ -132,8 +147,8 @@ impl sp_mvm::Config for Test {
     type GasWeightMapping = MoveVMGasWeightMapping;
 }
 
-pub type Sys = system::Module<Test>;
-pub type Time = timestamp::Module<Test>;
+pub type Sys = system::Pallet<Test>;
+pub type Time = timestamp::Pallet<Test>;
 pub type MoveEvent = sp_mvm::Event<Test>;
 
 // TODO: use this `MockOracle` instead of the real one
